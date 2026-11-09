@@ -59,7 +59,7 @@ def load_data(catalog, filename):
             
             record = {
                 "order_id":row["order_id"],
-                "order_date":row["order_date"],
+                "order_date":str(row["order_date"]),
                 "brand":row["brand"],
                 "model_name":row["model_name"],
                 "category":row["category"],
@@ -198,11 +198,45 @@ def req_3(catalog):
     pass
 
 
-def req_4(catalog):
-    """
-    Retorna el resultado del requerimiento 4
+def req_4(catalog:dict, nivel_ingresos:str, min_fecha:str, max_fecha:str, num_resultados:int)->dict:
+    """Por cada marca encontrada en un rango y para las entradas que cumplan con el nivel de ingresos designado
+    se calculan una serie de estadisticas por cada marca. Se puede elegir el número maximo de marcas para ser
+    retornadas
+
+    Args:
+        catalog (dict): los datos cargados
+        nivel_ingresos (str): valor para filtrar las entradas
+        min_fecha (str): limite inferior del rango
+        max_fecha (str): limite superior del rango
+        num_resultados (int): Cuantas marcas quieres que se incluyan en la respuesta
+
+    Returns:
+        dict: diccionario con una lista de las marcas y tiempo de ejecuión
     """
     # TODO: Modificar el requerimiento 4
+    start_time = get_time()
+    # Usare el arbol que tiene como llave las fechas
+    
+    date_list = rb.keys(catalog["key_order_date"], min_fecha, max_fecha) # array list
+    
+    heap = pq.new_heap(False)
+    
+    # voy a recorer la lista que ya esta filtrada por rango de fechas
+    
+    for i in range(sl.size(date_list)):
+        nivel_ingresos_actual = sl.get_element(date_list, i)["customer_income_level"]
+        if nivel_ingresos_actual == nivel_ingresos:
+        
+            curent_brand = sl.get_element(date_list, i)["brand"]
+            
+            if not pq.contains(heap, curent_brand): # COMO comparo para buscar la marca que necesito
+                entrada = {
+                    "brand":curent_brand
+                }
+                heap = pq.insert(heap, 0, entrada)
+                
+            
+        
     pass
 
 
