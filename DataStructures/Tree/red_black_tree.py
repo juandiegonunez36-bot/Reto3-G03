@@ -116,7 +116,7 @@ def rotate_right(node):
         raise RuntimeError("Error en rotate right")
 
 def get(tree: dict, k: Any, cmp_func=dflt_tree_node_cmp) -> dict:
-    """get recupera un nodo del árbol binario de búsqueda (BST) y lo
+    """get recupera un valor del árbol binario de búsqueda (BST) y lo
     retorna…
     """
     try:

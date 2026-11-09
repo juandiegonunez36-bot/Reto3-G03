@@ -9,6 +9,7 @@ from DataStructures.Map import map_separate_chaining as msc
 from DataStructures.Map import map_entry as me
 from DataStructures.Tree import red_black_tree as rb
 from DataStructures.Tree import rbt_node as rbtn
+from DataStructures.Priority_queue import priority_queue as pq
 
 def new_logic():
     """
@@ -66,7 +67,7 @@ def load_data(catalog, filename):
                 "size":int(row["size"]),
                 "color":row["color"],
                 "base_price_usd":float(row["base_price_usd"]),
-                "discount_percent":int(row["discount_percent"]),
+                "discount_percent":float(row["discount_percent"]),
                 "final_price_usd":float(row["final_price_usd"]),
                 "units_sold":int(row["units_sold"]),
                 "revenue_usd":float(row["revenue_usd"]),
@@ -135,12 +136,50 @@ def load_data(catalog, filename):
 # Funciones de consulta sobre el catálogo
 
 
-def req_1(catalog):
-    """
-    Retorna el resultado del requerimiento 1
+def req_1(catalog:dict, marca:str, min_pct:float, max_pct:float) -> dict:
+    """Como parametros recive la marca para filtrar y un rango de porcentajes.
+    Se dedica a filtrar los datos 
+
+    Args:
+        catalog (dict): Datos cargados
+        marca (str): Marca por la cual se quiere filtrar
+        min_pct (int): Limite inferior del rango
+        max_pct (int): Limite superior del rango
     """
     # TODO: Modificar el requerimiento 1
-    pass
+    # Se obtiene rango de llaves
+    start_time = get_time()
+    
+    total_cost = 0
+    f_list = rb.values(catalog["key_discount_percent"], str(min_pct), str(max_pct))
+    
+    result = al.new_list()
+    
+    for i in range(sl.size(f_list)):
+        curent_brand = sl.get_element(f_list, i)["brand"]
+        if curent_brand == marca:
+            al.add_last(result, sl.get_element(f_list, i))
+            total_cost += sl.get_element(f_list, i)["final_price_usd"]
+    
+    order_num = al.size(result)
+    
+    if al.size(result) > 20:
+        first_10 = al.sub_list(result, 0, 10)
+        last_10 = al.sub_list(result, int(al.size(result)-11), 10)
+        
+        for i in range(10):
+            al.add_last(first_10, al.get_element(last_10, i))
+        result = first_10
+    
+    load_time = delta_time(start_time, get_time())
+    
+    return {
+        "order_num":order_num,
+        "final_cost":total_cost,
+        "result":result,
+        "load_time":load_time
+    }
+
 
 
 def req_2(catalog):

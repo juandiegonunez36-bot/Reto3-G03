@@ -2,6 +2,7 @@ import sys
 from App import logic
 from pprint import pprint
 from DataStructures.List import array_list as al
+from DataStructures.List import single_linked_list as sl
 
 
 def new_logic():
@@ -64,7 +65,34 @@ def print_req_1(control):
         Función que imprime la solución del Requerimiento 1 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 1
-    pass
+    marca = str(input("Ingresa la marca por la que quieres filtrar: "))
+    
+    low_pct = int(input("Ingresa el limite inferior del porcentaje por el que quieres filtrar: "))
+    high_pct = int(input("ingresa el limite superior para los porcentajes que quieres filtrar"))
+    
+    result = logic.req_1(control, marca, low_pct, high_pct)
+    
+    print(f"Número de entradas que cumplen el filtro: {result["order_num"]}")
+    print("")
+    print(f"Costo total de las entradas filtradas: {result["final_cost"]}")
+    print("Primeras y últimas 10 entradas: ")
+    for i in range(al.size(result["result"])):
+        curent = al.get_element(result["result"], i)
+        filtrado = {"order_id":curent["order_id"],
+                    "order_date":curent["order_date"],
+                    "brand":curent["brand"],
+                    "model_name":curent["model_name"],
+                    "category":curent["category"],
+                    "final_price_usd":float(curent["final_price_usd"]),
+                    "units_sold":int(curent["units_sold"]),
+                    "revenue_usd":float(curent["revenue_usd"]),
+                    "country":curent["country"],
+                    "sales_channel":curent["sales_channel"],
+                    "discount":curent["discount_percent"]}
+        al.change_info(result["result"], i, filtrado)
+        
+    pprint(result["result"])
+    return
 
 
 def print_req_2(control):
