@@ -1,4 +1,7 @@
 import sys
+from App import logic
+from pprint import pprint
+from DataStructures.List import array_list as al
 
 
 def new_logic():
@@ -6,7 +9,7 @@ def new_logic():
         Se crea una instancia del controlador
     """
     #TODO: Llamar la función de la lógica donde se crean las estructuras de datos
-    pass
+    return logic.new_logic()
 
 def print_menu():
     print("Bienvenido")
@@ -24,7 +27,29 @@ def load_data(control):
     Carga los datos
     """
     #TODO: Realizar la carga de datos
-    pass
+    # Aqui cambiamos el archivo que estamos usando
+    return logic.load_data(control, "Data/Data/global_sports_footwear_sales-small.csv")
+
+
+def print_load(control):
+    """
+        Función que carga los datos y muestra en consola
+        el resultado de la carga (opción 0 del menú).
+
+        Uso de IA para usar pprint
+    """
+    print("Cargando información de los archivos ....\n")
+    data = load_data(control)
+    print("Tiempo de carga =", round(data["load_time"], 3), "ms")
+    print("Elementos cargados =", data["total_orders"])
+    print("Orden de menor valor =")
+    pprint(data["min_order"])
+    print("Orden de mayor valor =")
+    pprint(data["max_order"])
+    print("Primeros 5 elementos")
+    pprint(data["first_5"])
+    print("Últimos 5 elementos =")
+    pprint( data["last_5"])
 
 
 def print_data(control, id):
@@ -96,7 +121,7 @@ def main():
         inputs = input('Seleccione una opción para continuar\n')
         if int(inputs) == 0:
             print("Cargando información de los archivos ....\n")
-            data = load_data(control)
+            print_load(control)
         elif int(inputs) == 1:
             print_req_1(control)
 
